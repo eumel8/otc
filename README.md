@@ -16,7 +16,7 @@ Requirements
 ------------
 
 - python-shade
-- Working otc Openstack environment (.ostackrc, openrc, clouds.yaml, ...)
+- Working otc Openstack environment (.ostackrc, openrc, clouds.yaml, https://docs.openstack.org/developer/os-client-config/)
 
 How to use it
 -------------

@@ -14,6 +14,7 @@ class OtcCloud(openstackcloud.OpenStackCloud):
         self._vpcclient = None
         self._elbclient = None
         self._ecsclient = None
+        self._imsclient = None
 
     @property
     def auth_token(self):
@@ -67,6 +68,18 @@ class OtcCloud(openstackcloud.OpenStackCloud):
             )
         return self._ecsclient
 
+    @property
+    def imsclient(self):
+        if self._imsclient is None:
+            self._imsclient = otcclient.ImsClient(
+                cloud_config=self.cloud_config,
+                catalog=self.service_catalog,
+                project_id=self.project_id,
+                auth_token=self.auth_token,
+                management_url=self.management_url,
+            )
+        return self._imsclient
+
     @staticmethod
     def by_name_or_id(resources, name_or_id):
         return [
@@ -101,5 +114,12 @@ class OtcCloud(openstackcloud.OpenStackCloud):
 
     def search_listeners(self, name_or_id):
         return self.by_name_or_id(self.list_listeners(), name_or_id)
+
+    @_utils.cache_on_arguments()
+    def list_ims(self):
+        return self.imsclient.ims.list()
+
+    def search_ims(self, name_or_id):
+        return self.by_name_or_id(self.list_ims(), name_or_id)
 
 # vim: sts=4 sw=4 ts=4 et:

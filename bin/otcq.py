@@ -64,6 +64,16 @@ def listener_do(cloud, args):
     else:
         print "Operation not implemented: {}".format(args.OPERATION)
 
+def ims_do(cloud, args):
+    if args.OPERATION == 'list':
+        if args.IMS:
+            res = cloud.search_ims(args.IMS)
+        else:
+            res = cloud.list_ims()
+        print cmdout(args, res)
+    else:
+        print "Operation not implemented: {}".format(args.OPERATION)
+
 crud_operations = dict(
     choices=['list', 'create', 'delete', 'update'],
     help='operate on resource',
@@ -82,6 +92,7 @@ ap_vpc = sp.add_parser('vpc', help='Virtual Private Cloud')
 ap_ecs = sp.add_parser('ecs', help="Elastic Cloud Server")
 ap_elb = sp.add_parser('elb', help="Elastic Load Balancer")
 ap_listener = sp.add_parser('listener', help="Elastic Load Balancer Listener")
+ap_ims = sp.add_parser('ims', help="Image Management Service")
 
 ap_vpc.add_argument('OPERATION', **crud_operations)
 ap_vpc.add_argument('VPC', nargs='?', help="OTC vpc name or id")
@@ -91,11 +102,14 @@ ap_elb.add_argument('OPERATION', **crud_operations)
 ap_elb.add_argument('ELB', nargs='?', help="OTC elb name or id")
 ap_listener.add_argument('OPERATION', **crud_operations)
 ap_listener.add_argument('LISTENER', nargs='?', help="OTC elb listener name or id")
+ap_ims.add_argument('OPERATION', **crud_operations)
+ap_ims.add_argument('IMS', nargs='?', help="OTC ims name or id")
 
 ap_vpc.set_defaults(apicmd=vpc_do)
 ap_ecs.set_defaults(apicmd=ecs_do)
 ap_elb.set_defaults(apicmd=elb_do)
 ap_listener.set_defaults(apicmd=listener_do)
+ap_ims.set_defaults(apicmd=ims_do)
 
 if __name__ == '__main__':
     args = ap.parse_args()

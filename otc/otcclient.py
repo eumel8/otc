@@ -4,6 +4,7 @@ import ecs.ecs as ecs
 import vpc.vpc as vpc
 import elbaas.elb as elb
 import elbaas.listener as listener
+import ims.ims as ims
 
 import re
 
@@ -65,5 +66,13 @@ class ElbClient(OtcClient):
     def service_url(self):
         return super(ElbClient, self).service_url.replace('vpc', 'elb', 1)
  
+class ImsClient(OtcClient):
+    def __init__(self, *args, **kwargs):
+        super(ImsClient, self).__init__(*args, **kwargs)
+        self.ims = ims.ImsManager(self)
+
+    @property
+    def service_url(self):
+        return super(ImsClient, self).service_url.replace('vpc', 'ims', 1)
 
 # vim: sts=4 sw=4 ts=4 et:
